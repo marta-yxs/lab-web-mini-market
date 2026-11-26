@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Касса студенческого мини-маркета</title>
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; background-color: #f7f9fc; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 700px; margin: 0 auto; background: #fff; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); overflow: hidden; }
+        .header { background: #1a2a42; color: #fff; padding: 24px; }
+        .header h1 { margin: 0 0 8px 0; font-size: 24px; }
+        .header p { margin: 0; color: #a0aec0; font-size: 14px; }
+        .content { padding: 24px; }
+        .login-block { border-left: 4px solid #1a2a42; background: #f0f4f8; padding: 12px 16px; margin-bottom: 24px; font-family: monospace; font-size: 14px; }
+        h3 { font-size: 18px; margin-top: 0; margin-bottom: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 14px; }
+        th, td { text-align: left; padding: 10px; border-bottom: 1px solid #e2e8f0; }
+        th { color: #4a5568; font-weight: 600; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; margin-bottom: 6px; font-size: 14px; }
+        input[type="number"], select { width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        .checkbox-group { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; font-size: 14px; }
+        button { width: 100%; background: #2b6cb0; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: 600; transition: background 0.2s; }
+        button:hover { background: #2c5282; }
+        pre { background: #1a202c; color: #a0aec0; padding: 16px; border-radius: 6px; overflow-x: auto; font-family: monospace; font-size: 14px; margin-bottom: 16px; }
+        .error { color: #e53e3e; }
+        .success { color: #38a169; }
+        .rules-list { padding-left: 20px; font-size: 14px; line-height: 1.6; color: #4a5568; margin-bottom: 24px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Касса студенческого мини-маркета</h1>
+            <p>Практическое задание по теме «Функции и объекты в JavaScript»</p>
+        </div>
+
+
+        <div class="content">
+            <p style="font-size: 14px; line-height: 1.5;">Реализуй функцию <code>task(order)</code>, которая проверяет заказ и возвращает объект с его стоимостью или кодом ошибки.</p>
+            <p style="font-size: 14px; line-height: 1.5;">Изменять только тело функции task и значение LOGIN. Остальная часть страницы предоставлена преподавателем.</p>
+            
+            <div class="login-block">
+                LOGIN: <span id="login">167675</span>
+            </div>
+
+            <h3>Каталог</h3>
+            <table>
+                <tr><th>Товар</th><th>Цена, ₽</th><th>На складе</th></tr>
+                <tr><td>Тетради (notebook)</td><td>250</td><td>8</td></tr>
+                <tr><td>Маркеры (marker)</td><td>90</td><td>12</td></tr>
+                <tr><td>Папки (folder)</td><td>120</td><td>6</td></tr>
+            </table>
+
+            <h3>Правила</h3>
+            <ul class="rules-list">
+                <li>Количество товара должно быть целым неотрицательным числом.</li>
+                <li>Неизвестные товары, превышение остатка и пустой заказ недопустимы.</li>
+                <li>Промокод STUDENT дает скидку 10%, округленную вниз до рубля.</li>
+                <li>Другие непустые промокоды недопустимы.</li>
+                <li>Самовывоз бесплатен. Доставка стоит 150 ₽, но бесплатна, если сумма <b>после скидки</b> не меньше 1000 ₽.</li>
+                <li>Исходный объект заказа нельзя изменить.</li>
+            </ul>
+
+            <h3>Оформление заказа</h3>
+            <form id="orderForm">
+                <div class="form-group">
+                    <label>Тетради</label>
+                    <input type="number" id="qty-notebook" value="0" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Маркеры</label>
+                    <input type="number" id="qty-marker" value="0" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Папки</label>
+                    <input type="number" id="qty-folder" value="0" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Промокод</label>
+                    <select id="promo">
+                        <option value="">Без скидки</option>
+                        <option value="STUDENT">STUDENT</option>
+                    </select>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="pickup">
+                    <label for="pickup" style="margin: 0;">Самовывоз</label>
+                </div>
+                <button type="submit">Рассчитать заказ</button>
+            </form>
+
+            <h3 style="margin-top: 32px;">Результат работы скрипта</h3>
+            <pre id="result">{
+  "ok": false,
+  "error": "not-implemented"
+}</pre>
+            <p style="font-size: 14px; color: #718096;">Пока функция task не реализована, показывается код not-implemented.</p>
+        </div>
+    </div>
+
+    <script>
+        window.task = function(order) {
+            const catalog = {
+                notebook: { price: 250, stock: 8 },
+                marker: { price: 90, stock: 12 },
+                folder: { price: 120, stock: 6 }
+            };
+
+            let subtotal = 0;
+            let totalItems = 0;
+
+            for (let itemCode in order.items) {
+                if (!catalog[itemCode]) {
+                    return { ok: false, error: "unknown-item" };
+                }
+
+                let qty = order.items[itemCode];
+
+                if (!Number.isInteger(qty) || qty < 0) {
+                    return { ok: false, error: "invalid-quantity" };
+                }
+
+                if (qty > catalog[itemCode].stock) {
+                    return { ok: false, error: "out-of-stock" };
+                }
+
+                subtotal += qty * catalog[itemCode].price;
+                totalItems += qty;
+            }
+
+            if (totalItems === 0) {
+                return { ok: false, error: "empty-cart" };
+            }
+
+            let promo = order.promo || "";
+            if (promo !== "" && promo !== "STUDENT") {
+                return { ok: false, error: "bad-promo" };
+            }
+
+            let discount = 0;
+            if (promo === "STUDENT") {
+                discount = Math.floor(subtotal * 0.1);
+            }
+
+            let delivery = 0;
+            if (!order.pickup) {
+                if (subtotal - discount < 1000) {
+                    delivery = 150;
+                }
+            }
+
+            let total = subtotal - discount + delivery;
+
+            return {
+                ok: true,
+                subtotal: subtotal,
+                discount: discount,
+                delivery: delivery,
+                total: total
+            };
+        };
+
+        const form = document.getElementById('orderForm');
+        const resultElement = document.getElementById('result');
+
+        function displayResult(result) {
+            resultElement.textContent = JSON.stringify(result, null, 2);
+            if (result.ok) {
+                resultElement.style.color = '#68d391';
+            } else {
+                resultElement.style.color = '#fc8181';
+            }
+        }
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const order = {
+                items: {},
+                promo: document.getElementById('promo').value,
+                pickup: document.getElementById('pickup').checked
+            };
+            
+            const nb = Number(document.getElementById('qty-notebook').value);
+            const mk = Number(document.getElementById('qty-marker').value);
+            const fl = Number(document.getElementById('qty-folder').value);
+
+            if (nb !== 0) order.items.notebook = nb;
+            if (mk !== 0) order.items.marker = mk;
+            if (fl !== 0) order.items.folder = fl;
+
+            displayResult(window.task(order));
+        });
+
+        window.addEventListener('DOMContentLoaded', function() {
+            const params = new URLSearchParams(window.location.search);
+            if (!params.toString()) return;
+
+            const order = {
+                items: {},
+                promo: params.get('promo') || "",
+                pickup: params.get('pickup') === 'true' || params.get('pickup') === '1'
+            };
+
+            ['notebook', 'marker', 'folder'].forEach(function(item) {
+                if (params.has(item)) {
+                    const val = Number(params.get(item));
+                    order.items[item] = val;
+                    document.getElementById('qty-' + item).value = val;
+                }
+            });
+
+            document.getElementById('promo').value = order.promo;
+            document.getElementById('pickup').checked = order.pickup;
+
+            displayResult(window.task(order));
+        });
+    </script>
+</body>
+</html>
